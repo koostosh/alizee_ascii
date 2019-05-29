@@ -392,6 +392,12 @@ esac
 done
 
 
+function __cleanup {
+    clear
+    exit 0
+}
+trap __cleanup SIGINT
+
 clear
 
 if [ $fullanimation = 0 ] || [ $(id -u) -ne 0 ]; then
