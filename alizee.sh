@@ -1,5 +1,5 @@
 #!/bin/bash
-datacompressed=$(cat <<'__EOF'
+datacompressed=("
 H4sICPdh7lwAA2RhdGFfYWwAnZ25luQqDIbzehUOkPM0FVTgZA6BI7/9tXYJ8NLX5y4z3V1/sxn0
 ISFawyeX7+Uzfavkxp+S/3/aQia3Wuv5L361lFmmZBGIMtnJtP04tt9vO/bz6eFbplNKnmXy+bPy
 w/U4n+3U+R297/vRV/UthcoEHzw/WiaZtm0HPr3hrzyLtmq2oaZcqfOr9PWyY2VOlUyFb8fWFzLf
@@ -341,24 +341,48 @@ AuA4cShNiYce6R6CYw9uN2bW0zrVZYOi3jwzBA20/I7B7cZ7tRzHX+ylEJkWskDwiS6YdWT3hYND
 ZAkrutGRTaZU9dmWgFQ7OWuP0WXmSBOhlU5zVeHM0rxIxeRvh7PfnE5xgxjpLjc5mREIkQt9kUJE
 VzSWKUJ1RbyawjHMZWAMtBEUhbOy2xXIsBtQ+CIKOYzldo1dlzgdI032axYE3zgBOMMC/7uS+Ua/
 Joai+5K4EAkRuOIy+jNGZpaaspYkFEXBbIZod4r5HDef/wCgL7Bu7m4BAA==
-__EOF
-)
+")
 
-compressednosudo=$(cat <<'__EOF'
+
+compressednosudo=("
 H4sICOlh7lwAA2RhdGFfYWxub3N1ZG8ArdA9DsMgDAXgPad4m0EysGaooh4ECW6QC7h3LwaSmM5F
 UcTjx/liwI5NX+e5xJ3ogwNvvDTGHTHEkkR3IxWq5GuJpDELPNJ11x3U5lK4XKVEJ44F464mpjwi
 aiuqK34e7usA1dAjUQhWZczuYIPeVGDNUhdzDdGa+xeTqdzNhVdzP3Gbx/nbrMTFPHdDJfyau3VE
 fvmGljxiwq5oQdYorTSjPTyQE01PqRvdY4Iro9GX2QW2Zm/NnI25jZoXpLqfeFozdhgzRqOnebTm
 MTfDava5tNF+e/b5Iv/VvH0BFB3V2NECAAA=
-__EOF
-)
+")
+
+helpinfo="$0, a small script to display dancing animation
+If you don't like the output try running it as superuser
+options:
+    -h: display this help
+    -f: show non-superuser output even if you are superuser
+"
 
 echovaluenosudo=`echo -n "$compressednosudo" | base64 -d | gzip -dc`
 echovalue=`echo -n "$datacompressed" | base64 -d | gzip -dc`
+fullanimation=1
+
+while getopts ":hf" opt; do
+case $opt in
+    "h" )
+        echo "$helpinfo"
+        exit 0
+        ;;
+    "f" )
+        fullanimation=0
+        ;;
+    \? )
+        echo "invalid command"
+        exit 1
+        ;;
+esac
+done
+
 
 clear
 
-if [[ $(id -u) -ne 0 ]]; then
+if [ $fullanimation = 0 ] || [ $(id -u) -ne 0 ]; then
 for (( ; ; ))
 do
     for i in {0..3}
