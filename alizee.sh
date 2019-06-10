@@ -394,7 +394,7 @@ case $opt in
         fullanimation=0
         ;;
     "b" )
-        echovalue=`cat data_al_nobgs | sed 'h;s/x.*//;s/./ /g;x;s/^[^x]*//;x;G;s/[\nx]//g;s/z.*//'`
+        echovalue=`echo -n "$datacompressed" | base64 -d | gzip -dc | sed 'h;s/x.*//;s/./ /g;x;s/^[^x]*//;x;G;s/[\nx]//g;s/z.*//'`
         ;;
     \? )
         echo "invalid command"
